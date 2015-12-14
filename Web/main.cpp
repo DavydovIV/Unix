@@ -1,7 +1,7 @@
 #include <iostream>
 #include <sys/syslog.h>
 #include <sys/stat.h>
-#include "VebChik.h"
+#include "Web.h"
 
 using namespace std;
 
@@ -14,17 +14,17 @@ int main(int argc, char *argv[]) {
         close(STDIN_FILENO);
         close(STDOUT_FILENO);
         close(STDERR_FILENO);
-        openlog("VebChik", LOG_CONS | LOG_PID | LOG_NDELAY, LOG_LOCAL1);
-        u_short port_number = 8082;
-        syslog(LOG_INFO, "Server works on %d port", port_number);
+        openlog("Web ", LOG_CONS | LOG_PID | LOG_NDELAY, LOG_LOCAL1);
+        u_short port_number = 8090;
+        syslog(LOG_INFO, "Daemon is start with Port: %d ", port_number);
         try {
-            VebChik web(port_number);
+            Web web(port_number);
             web.dispatchCommands();
         } catch (std::string &errorMsg) {
             syslog(LOG_ERR, errorMsg.c_str());
         }
     } else if (pid < 0) {
-        syslog(LOG_ERR, "Can't demonize process");
+        syslog(LOG_ERR, "Sorry :( I can't demonize process");
         exit(EXIT_FAILURE);
     } else {
         exit(EXIT_SUCCESS);
