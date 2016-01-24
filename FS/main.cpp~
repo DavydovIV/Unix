@@ -1,0 +1,53 @@
+#include <iostream>
+#include <set>
+#include "SB.h"
+#include "help.h"
+
+using namespace std;
+
+void print_usage() {
+    cout << "Incorrect input! Use:" << endl
+	 << "file_name command" << endl 
+	 << "command: " << endl
+	 << "help" << endl << "print_super" << endl
+	 << "print_root" << endl << "print_fat" << endl
+ 	 << "print_tree" << endl << "get_file file" << endl
+	 << "remove_file file";
+}
+
+int main(int argc, char* argv[]) {
+    if (argc < 3) {
+        print_usage();
+        return -1;
+    }
+    string filename(argv[1]);
+    string command(argv[2]);
+    try {
+        if (command == "help") {
+            print_usage();
+        } else if (command == "print_super") {
+            SB superBlock(filename);
+            superBlock.print();
+        } else if (command == "print_root") {
+            help::printRoot(filename);
+        } else if (command == "print_fat") {
+            help::printFat(filename);
+        } else if (command == "print_tree") {
+            help::printTree(filename);
+        } else if (command == "get_file") {
+            string file(argv[3]);
+            vector<unsigned char> data = help::getFile(filename, file);
+            for(auto c : data)
+                cout << c;
+        } else if (command == "remove_file") {
+            string file(argv[3]);
+            help::removeFile(filename, file);
+        }
+        else {
+            print_usage();
+        }
+    } catch (string& error) {
+        cerr << error << endl;
+    }
+    return 0;
+}
